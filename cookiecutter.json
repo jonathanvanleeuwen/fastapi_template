@@ -1,0 +1,6 @@
+{
+    "project_name": "example_fastapi_project",
+    "my_name": "my_name",
+    "github_username": "my_github_username",
+    "app_description": "FastAPI application with authentication"
+}

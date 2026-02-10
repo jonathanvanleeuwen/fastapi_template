@@ -12,7 +12,7 @@
 
 **CLEAN Code**
 - **C**lear: Code intent is obvious from reading it
-- **L**ogical: Functions do one thing, follow single responsibility principle  
+- **L**ogical: Functions do one thing, follow single responsibility principle
 - **E**asy to understand: Junior developers should be able to review it
 - **A**ccessible: Avoid clever tricks; prefer explicit over implicit
 - **N**ecessary: Every line serves a purpose; no dead code
@@ -45,7 +45,7 @@
   # Loop through users and add to list
   for user in users:
       result.append(user)
-  
+
   # ✅ GOOD: Explains why (non-obvious business rule)
   # OAuth tokens expire after 24h, but we refresh at 23h to prevent edge cases
   refresh_threshold = timedelta(hours=23)
@@ -97,6 +97,26 @@
 - Always run tests in the `.venv` environment
 - Execute with: `pytest` (picks up config from pyproject.toml)
 - Coverage reports generated in `reports/htmlcov/`
+
+### Documentation Requirements
+
+**Always Update README.md**
+- When adding new features, **immediately update README.md** with:
+  - Usage examples showing the new functionality
+  - Configuration options if applicable
+  - Output/artifact descriptions
+  - Integration instructions if needed
+- When changing how artifacts are generated (models, figures, metrics):
+  - Update the "Generated Outputs" section
+  - Include directory structure examples
+  - Document file formats and contents
+- README must stay synchronized with code - outdated docs are worse than no docs
+
+**Documentation Standards**
+- Examples must be runnable (copy-paste should work)
+- Include both CLI and programmatic usage where applicable
+- Show realistic use cases, not toy examples
+- Explain WHY features exist, not just HOW to use them
 
 ### Meta-Instruction
 **Keep these instructions updated** based on chat interactions when patterns emerge or decisions are made that should guide future development.
@@ -186,7 +206,7 @@ src/{{cookiecutter.project_name}}/
   ```python
   _security_bearer = Security(bearer_scheme)
   _depends_settings = Depends(get_settings)
-  
+
   def endpoint(credentials = _security_bearer, settings = _depends_settings):
       pass
   ```

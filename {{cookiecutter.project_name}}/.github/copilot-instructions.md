@@ -74,6 +74,30 @@
 - Consistent naming conventions throughout the project
 - Code is read 10x more than written - optimize for reading
 
+### Development Tooling Standards
+
+**Python Version**
+- Follow Python syntax for the version specified in `pyproject.toml` (currently >=3.12)
+- Backwards compatibility is NOT required - use modern Python features
+
+**Package & Environment Management**
+- Use `uv` for all virtual environment operations
+- Always create venvs with: `uv venv .venv`
+- Install dependencies with: `uv pip install -e ".[dev]"`
+
+**Code Quality Tools**
+- **ruff**: Primary linter and formatter (replaces black, isort, flake8)
+  - Format code: `ruff format .`
+  - Check code: `ruff check .`
+  - Fix issues: `ruff check --fix .`
+- Follow ruff's formatting style (no manual formatting needed)
+
+**Testing**
+- **pytest**: Only testing framework to use
+- Always run tests in the `.venv` environment
+- Execute with: `pytest` (picks up config from pyproject.toml)
+- Coverage reports generated in `reports/htmlcov/`
+
 ### Meta-Instruction
 **Keep these instructions updated** based on chat interactions when patterns emerge or decisions are made that should guide future development.
 
@@ -108,25 +132,31 @@
 
 **Initial Setup**
 ```bash
-python -m venv .venv
-# Windows: .venv\Scripts\activate | Unix: source .venv/bin/activate
-pip install -e ".[dev]"
-pre-commit install
-pre-commit run --all-files  # REQUIRED before first commit
+uv venv .venv                    # Create virtual environment with uv
+uv pip install -e ".[dev]"      # Install package and dev dependencies
+pre-commit install              # Install pre-commit hooks
+pre-commit run --all-files      # Run hooks on all files (REQUIRED before first commit)
+```
+
+**Code Quality**
+```bash
+ruff format .                   # Format all code
+ruff check .                    # Check for issues
+ruff check --fix .              # Auto-fix issues
 ```
 
 **Running Locally**
 ```bash
-python dev_server.py  # Runs on http://localhost:8000
+python dev_server.py            # Runs on http://localhost:8000
 # Frontend: http://localhost:8000/static/
 # API Docs: http://localhost:8000/docs
 ```
 
 **Testing**
 ```bash
-pytest                    # Run all tests with coverage
-pytest -v tests/unit/     # Verbose unit tests only
-pytest -k "test_add"      # Run specific test pattern
+pytest                          # Run all tests with coverage (reports/htmlcov/)
+pytest -v tests/unit/           # Verbose unit tests only
+pytest -k "test_add"            # Run specific test pattern
 ```
 
 **Test Patterns** (see [tests/conftest.py](tests/conftest.py))

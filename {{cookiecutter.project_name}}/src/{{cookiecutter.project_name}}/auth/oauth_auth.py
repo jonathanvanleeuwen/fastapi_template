@@ -53,10 +53,12 @@ def verify_access_token(token: str) -> dict[str, Any]:
     try:
         payload = jwt.decode(token, settings.oauth_secret_key, algorithms=["HS256"])
         payload["utc_exp"] = exp_utc
+        payload["token_expired"] = False
         logger.debug("Token is valid", extra=payload)
         return payload
     except jwt.ExpiredSignatureError as exc:
         payload["utc_exp"] = exp_utc
+        payload["token_expired"] = True
         logger.debug("Token expired at %s", exp_utc, extra=payload)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

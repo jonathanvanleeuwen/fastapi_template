@@ -94,6 +94,12 @@ def create_auth(allowed_roles: list[str] | None = None) -> Callable:
         settings: Settings = _depends_settings,
     ) -> dict[str, Any]:
         if not credentials or credentials.scheme.lower() != "bearer":
+            scheme_info = credentials.scheme if credentials else "None"
+            logger.debug(
+                "No credentials provided or invalid auth schememe: %s",
+                scheme_info,
+                extra={"credentials": credentials},
+            )
             raise HTTPException(
                 status_code=status.HTTP_307_TEMPORARY_REDIRECT,
                 detail="Authentication required",
@@ -112,6 +118,7 @@ def create_auth(allowed_roles: list[str] | None = None) -> Callable:
             request.state.user_info = user_data
             return user_data
 
+        logger.debug("Authentication failed for token: %s", token)
         raise HTTPException(
             status_code=status.HTTP_307_TEMPORARY_REDIRECT,
             detail="Invalid authentication credentials",

@@ -1,25 +1,14 @@
 import logging
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime, timedelta, timezone
 from typing import Any
 
 import jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2AuthorizationCodeBearer
 
-from {{cookiecutter.project_name}}.auth.oauth_providers import OAUTH_PROVIDERS
 from {{cookiecutter.project_name}}.settings import get_settings
 
 logger = logging.getLogger(__name__)
-
-
-def get_oauth_config() -> dict[str, str]:
-    settings = get_settings()
-    provider = settings.oauth_provider
-
-    if provider not in OAUTH_PROVIDERS:
-        raise ValueError(f"Unsupported OAuth provider: {provider}")
-
-    return OAUTH_PROVIDERS[provider]
 
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
@@ -53,6 +42,20 @@ def create_access_token(
 
 def verify_access_token(token: str) -> dict[str, Any]:
     settings = get_settings()
+    payload = jwt.decode(
+        token,
+        settings.oauth_secret_key,
+        algorithms=["HS256"],
+        options={"verify_exp": False},
+    )
+    token_exp = payload.get("exp", 0)
+    exp_utc = datetime.fromtimestamp(token_exp, tz=timezone.utc) if token_exp > 0 else None
+    logger.debug(
+        "Token payload after decoding (without verifying expiration): %s",
+        payload,
+        extra=payload,
+    )
+    logger.debug("Token expiration time [UTC]: %s", exp_utc, extra={"exp": token_exp, "exp_utc": exp_utc})
     try:
         payload = jwt.decode(token, settings.oauth_secret_key, algorithms=["HS256"])
         return payload

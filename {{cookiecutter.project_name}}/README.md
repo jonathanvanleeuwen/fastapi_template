@@ -6,6 +6,9 @@
 
 A FastAPI application with dual authentication (API Keys + OAuth), role-based access control, and comprehensive testing.
 
+<!-- Pytest Coverage Comment:Begin -->
+<!-- Pytest Coverage Comment:End -->
+
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
@@ -523,5 +526,3 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 
 ---
 
-<!-- Pytest Coverage Comment:Begin -->
-<!-- Pytest Coverage Comment:End -->

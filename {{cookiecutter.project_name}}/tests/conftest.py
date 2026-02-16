@@ -23,7 +23,6 @@ def test_settings(test_api_keys):
         oauth_secret_key: str = "test_secret_key_at_least_32_characters_long"
         oauth_client_id: str = "test_client_id"
         oauth_client_secret: str = "test_client_secret"
-        oauth_tenant_id: str = "test_tenant_id"
 
     return TestSettings()
 

@@ -2,10 +2,9 @@ import base64
 import json
 from functools import lru_cache
 
+from lib_auth.utils.auth_utils import hash_api_key
 from pydantic import model_validator
 from pydantic_settings import BaseSettings
-
-from {{cookiecutter.project_name}}.utils.auth_utils import hash_api_key
 
 
 class Settings(BaseSettings):

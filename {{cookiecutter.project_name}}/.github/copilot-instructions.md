@@ -95,7 +95,7 @@
 **Testing**
 - **pytest**: Only testing framework to use
 - Always run tests in the `.venv` environment
-- Execute with: `pytest` (picks up config from pyproject.toml)
+- Execute with: `.\.venv\Scripts\python.exe -m pytest -v` (picks up config from pyproject.toml)
 - Coverage reports generated in `reports/htmlcov/`
 
 ### Documentation Requirements

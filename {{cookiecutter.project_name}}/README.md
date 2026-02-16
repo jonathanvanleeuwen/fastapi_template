@@ -17,6 +17,9 @@ A FastAPI application with dual authentication (API Keys + OAuth), role-based ac
   - [Prerequisites](#prerequisites)
   - [Installation \& Run](#installation--run)
   - [Access Points](#access-points)
+- [Docker Deployment](#docker-deployment)
+  - [Build and Run with Docker](#build-and-run-with-docker)
+  - [Docker Compose Example](#docker-compose-example)
 - [Authentication](#authentication)
   - [API Key Authentication](#api-key-authentication)
   - [OAuth 2.0 Authentication](#oauth-20-authentication)
@@ -93,6 +96,56 @@ python dev_server.py
 - **Authentication Frontend**: http://localhost:8000/static/ (test both OAuth and API key methods)
 - **API Documentation**: http://localhost:8000/docs
 - **Alternative Docs**: http://localhost:8000/redoc
+
+## Docker Deployment
+
+### Build and Run with Docker
+
+```bash
+# Build the Docker image
+docker build -t {{cookiecutter.project_name}}:latest .
+
+# Run the container
+docker run -d \
+  --name {{cookiecutter.project_name}} \
+  -p 8000:8000 \
+  -e {{cookiecutter.project_name.upper()}}_PORT=8000 \
+  -e API_KEYS="your-base64-encoded-api-keys" \
+  -e OAUTH_CLIENT_ID="your-client-id" \
+  -e OAUTH_CLIENT_SECRET="your-client-secret" \
+  -e OAUTH_SECRET_KEY="your-jwt-secret-key" \
+  -e OAUTH_PROVIDER="github" \
+  {{cookiecutter.project_name}}:latest
+
+# View logs
+docker logs -f {{cookiecutter.project_name}}
+
+# Stop and remove
+docker stop {{cookiecutter.project_name}}
+docker rm {{cookiecutter.project_name}}
+```
+
+### Docker Compose Example
+
+```yaml
+version: '3.8'
+
+services:
+  {{cookiecutter.project_name}}:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      {{cookiecutter.project_name.upper()}}_PORT: 8000
+      API_KEYS: ${API_KEYS}
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
+      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+      OAUTH_SECRET_KEY: ${OAUTH_SECRET_KEY}
+      OAUTH_PROVIDER: github
+    restart: unless-stopped
+```
+
+**Note:** The Docker image includes Git to support installing `lib_auth` from GitHub during build.
 
 ## Authentication
 

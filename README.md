@@ -2,17 +2,18 @@
 A cookiecutter template for FastAPI applications with modern CI/CD setup.
 
 ## Features
-* FastAPI application with dual authentication (API Keys + OAuth 2.0)
+* FastAPI application with dual authentication (API Keys + OAuth 2.0) via [lib_auth](https://github.com/jonathanvanleeuwen/lib_auth)
+* Built-in support for GitHub, Google, Microsoft, GitLab, LinkedIn, and Discord OAuth providers
 * Role-based access control with granular permissions
 * Worker pattern for clean separation between routes and business logic
 * Structured JSON logging with request tracking
+* OAuth testing frontend included for development
 * Automated testing on PR using GitHub Actions
 * Pre-commit hooks for code quality (ruff, isort, trailing whitespace, etc.)
 * Semantic release using GitHub Actions
 * Automatic code coverage report in README
 * Automatic wheel build and GitHub Release publishing
 * Modern Python packaging with pyproject.toml
-* OAuth testing frontend included
 
 *Notes*
 Workflows trigger when a branch is merged into main!
@@ -50,6 +51,54 @@ Cookiecutter template:
   * `cp .env.example .env`
 * Check proper install by running tests
   * `pytest`
+
+## Authentication Configuration
+
+The template uses [lib_auth](https://github.com/jonathanvanleeuwen/lib_auth) for authentication, supporting both API keys and OAuth 2.0.
+
+### API Keys
+
+API keys are stored in base64-encoded JSON in the `API_KEYS` environment variable (see `settings.py`). The template includes a default configuration for testing.
+
+**To generate your own API keys:**
+
+```python
+from lib_auth.utils.auth_utils import hash_api_key
+import base64
+import json
+
+# Create your API keys
+api_keys = {
+    "your-secret-admin-key": {"username": "admin", "roles": ["admin", "user"]},
+    "your-secret-user-key": {"username": "user", "roles": ["user"]},
+}
+
+# Encode for environment variable
+encoded = base64.b64encode(json.dumps(api_keys).encode()).decode()
+print(f"API_KEYS={encoded}")
+```
+
+### OAuth 2.0
+
+Configure OAuth in your `.env` file:
+
+```env
+OAUTH_PROVIDER=github  # or google, microsoft, gitlab, linkedin, discord
+OAUTH_CLIENT_ID=your-client-id
+OAUTH_CLIENT_SECRET=your-client-secret
+OAUTH_SECRET_KEY=your-jwt-secret-key-min-32-chars
+```
+
+**OAuth Setup:**
+- **GitHub**: [Create OAuth App](https://github.com/settings/developers)
+- **Google**: [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials
+- For other providers, see the [lib_auth documentation](https://github.com/jonathanvanleeuwen/lib_auth)
+
+### Testing Authentication
+
+The template includes a static frontend at `http://localhost:8000/static/` for testing OAuth flows during development.
+
+---
 
 ## Turn the new local cookiecutter code into a git repo
 

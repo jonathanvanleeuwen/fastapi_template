@@ -36,7 +36,7 @@ Cookiecutter template:
 * Install cookiecutter using pip
   * `pip install cookiecutter`
 * Run the cookiecutter template from this GitHub repo
-  * `cookiecutter https://github.com/YOUR_USERNAME/fastapi_template`
+  * `cookiecutter https://github.com/jonathanvanleeuwen/fastapi_template`
 * Fill in your new application values (including your GitHub username for CODEOWNERS)
 * Create new virtual environment
   *  `python -m venv .venv`
